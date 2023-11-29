@@ -1,0 +1,98 @@
+body {
+    margin: 0;
+    border: 10px blue solid;
+    padding: 0;
+}
+#clock {
+    height: 50vh;
+    background-color: saddlebrown;
+    line-height: 50vh;
+    text-align: center;
+    font-size: 35vh;
+    cursor: default;
+}
+.btn1 {
+    font-size: 30px;
+    width: 100px;
+    border-radius: 20px;
+    background-color: pink;
+}
+#btns1 {
+    padding-top: 20px;
+    background-color: skyblue;
+    height: 10vh;
+}
+#hourBtn, #minuteBtn, #secondBtn {
+    float: left;
+}
+#hourBtn {
+    margin-left: 285px;
+}
+#minuteBtn {
+    margin-left: 113px;
+}
+#secondBtn {
+    margin-left: 109px;
+}
+.left {
+    margin-right: 40px;
+}
+.btn1:hover {
+    position: relative;
+    bottom: 5px;
+    background-color: deeppink;
+    cursor: pointer;
+}
+#btns2 {
+    background-color: gold;
+    height: 34vh;
+}
+.btn2 {
+    float: left;
+    width: 200px;
+    height: 100px;
+    font-size: 30px;
+    margin-top: 80px;
+    margin-right: 80px;
+    background-color: yellowgreen;
+    border-radius: 20px;
+}
+.btn2:hover {
+    background-color: green;
+    position: relative;
+    bottom: -5px;
+    cursor: pointer;
+}
+.btn2:first-child {
+    margin-left: 90px;
+}
+.colon, #hour, #minute, #second {
+    float: left;
+}
+#hour {
+    margin-left: 65px;
+}
+#btns1 .hiddenBtn {
+    width: 95%;
+    height: 10vh;
+    background-color: skyblue;
+    position:absolute;
+    display: none;
+    bottom: 270px;
+    line-height: 10vh;
+    text-align: center;
+    font-size: 60px;
+    cursor: default;
+    text-shadow: -10px -10px 10px bisque;
+    color:bisque;
+}
+.bar {
+    float: left;
+    width: 200px;
+    height: 100px;
+    background-color: gray;
+    line-height: 100px;
+    text-align: center;
+    font-size: 40px;
+    color: red;
+}

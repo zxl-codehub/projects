@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>电子钟</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="clock">
+        <div class="bar">——</div>
+        <span id="hour">00</span>
+        <span class="colon">:</span>
+        <span id="minute">00</span>
+        <span class="colon">:</span>
+        <span id="second">00</span>
+    </div>
+    <div id="btns1">
+        <div class="hiddenBtn">加减功能已被禁用</div>
+        <div id="hourBtn">
+            <button class="btn1 left">加1</button>
+            <button class="btn1 right">减1</button>
+        </div>
+        <div id="minuteBtn">
+            <button class="btn1 left">加1</button>
+            <button class="btn1 right">减1</button>
+        </div>
+        <div id="secondBtn">
+            <button class="btn1 left">加1</button>
+            <button class="btn1 right">减1</button>
+        </div>
+    </div>
+    <div id="btns2">
+        <button class="btn2 getNowTime">显示当前时间</button>
+        <button class="btn2 countup">正计时</button>
+        <button class="btn2 countdown">倒计时</button>
+        <button class="btn2 toZero">归零</button>
+        <button class="btn2 stop">暂停</button>
+    </div>
+
+    <script src="./clock_.js"></script>
+    <script>
+        var meterCore = new Clock(); //表芯对象
+        var hour = document.querySelector('#hour');
+        var minute = document.querySelector('#minute');
+        var second = document.querySelector('#second');
+        var interval_id = null;
+
+        //小时加减
+        var hourAddBtn = document.querySelector('#hourBtn .left');
+        var hourMinusBtn = document.querySelector('#hourBtn .right');
+        hourAddBtn.onclick = function() {
+            meterCore.hour.add();
+            hour.innerText = meterCore.hour.getCurrentNum();
+        }
+        hourMinusBtn.onclick = function() {
+            meterCore.hour.minus();
+            hour.innerText = meterCore.hour.getCurrentNum();
+        }
+
+        //分钟加减
+        var minuteAddBtn = document.querySelector('#minuteBtn .left');
+        var minuteMinusBtn = document.querySelector('#minuteBtn .right');
+        minuteAddBtn.onclick = function() {
+            meterCore.minute.add();
+            minute.innerText = meterCore.minute.getCurrentNum();
+        }
+        minuteMinusBtn.onclick = function() {
+            meterCore.minute.minus();
+            minute.innerText = meterCore.minute.getCurrentNum();
+        }
+
+        //秒加减
+        var secondAddBtn = document.querySelector('#secondBtn .left');
+        var secondMinusBtn = document.querySelector('#secondBtn .right');
+        secondAddBtn.onclick = function() {
+            meterCore.second.add();
+            second.innerText = meterCore.second.getCurrentNum();
+        }
+        secondMinusBtn.onclick = function() {
+            meterCore.second.minus();
+            second.innerText = meterCore.second.getCurrentNum();
+        }
+
+        //显示当前时间
+        var getNowTimeBtn = document.querySelector('#btns2 .getNowTime');
+        getNowTimeBtn.onclick = function() {
+            barMes('当前时间');
+            clearInterval(interval_id);
+            meterCore.setNowTime();
+            hour.innerText = meterCore.getTime()[0];
+            minute.innerText = meterCore.getTime()[1];
+            second.innerText = meterCore.getTime()[2];
+            interval_id = setInterval(function() {
+                flicker(meterCore.addSecond());
+                hour.innerText = meterCore.getTime()[0];
+                minute.innerText = meterCore.getTime()[1];
+                second.innerText = meterCore.getTime()[2];
+            }, 1000);
+            disabled(true);
+        }
+
+        //暂停
+        var stopBtn = document.querySelector('#btns2 .stop');
+        stopBtn.onclick = function() {
+            barMes('暂停');
+            clearInterval(interval_id);
+            disabled(false);
+        }
+
+        //归零
+        var toZeroBtn = document.querySelector('#btns2 .toZero');
+        toZeroBtn.onclick = function() {
+            meterCore.hour.setCurrentNum(0);
+            meterCore.minute.setCurrentNum(0);
+            meterCore.second.setCurrentNum(0);
+            hour.innerText = minute.innerText = second.innerText = '00';
+        }
+
+        //正计时
+        var countupBtn = document.querySelector('#btns2 .countup');
+        countupBtn.onclick = function() {
+            barMes('正计时');
+            clearInterval(interval_id);
+            meterCore.hour.setCurrentNum(parseInt(hour.innerText));
+            meterCore.minute.setCurrentNum(parseInt(minute.innerText));
+            meterCore.second.setCurrentNum(parseInt(second.innerText));
+            interval_id = setInterval(function() {
+                flicker(meterCore.addSecond());
+                hour.innerText = meterCore.getTime()[0];
+                minute.innerText = meterCore.getTime()[1];
+                second.innerText = meterCore.getTime()[2];
+            }, 1000);
+            disabled(true);
+        }
+
+        //倒计时
+        var countdownBtn = document.querySelector('#btns2 .countdown');
+        countdownBtn.onclick = function() {
+            barMes('倒计时');
+            clearInterval(interval_id);
+            meterCore.hour.setCurrentNum(parseInt(hour.innerText));
+            meterCore.minute.setCurrentNum(parseInt(minute.innerText));
+            meterCore.second.setCurrentNum(parseInt(second.innerText));
+            interval_id = setInterval(function() {
+                flicker(meterCore.minusSecond());
+                hour.innerText = meterCore.getTime()[0];
+                minute.innerText = meterCore.getTime()[1];
+                second.innerText = meterCore.getTime()[2];
+            }, 1000);
+            disabled(true);
+        }
+        
+        //盖住增减按钮
+        function disabled(tag) {
+            var div = document.querySelector('#btns1 .hiddenBtn');
+            div.style.display = tag ? 'block' : 'none';
+        }
+        //控制冒号闪烁
+        function flicker(tag) {
+            if (!tag) return;
+            var colons = document.querySelectorAll('#clock .colon');
+            colons[0].style.color = colons[1].style.color = 'red';
+            var id = setInterval(function() {
+                colons[0].style.color = colons[1].style.color = 'black';
+                clearInterval(id);
+            }, 100);
+        }
+        //横条提示
+        function barMes(type) {
+            var bar = document.querySelector('#clock .bar');
+            bar.innerHTML = type;
+        }
+    </script>
+</body>
+</html>

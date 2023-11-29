@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>兰顿蚂蚁</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-size: 0;
+        }
+        .grid {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border: 1px solid #CCC;
+        }
+        .blackBlock {
+            width: 8px;
+            height: 8px;
+            border: 1px solid #CCC;
+            background-color: deeppink;
+        }
+        .whiteBlock {
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var width = 151;
+        var height = 71;
+        for(let i = 0; i < height; i++) {
+            let div = document.createElement('div');
+            document.body.appendChild(div);
+            for(let j = 0; j < width; j++) {
+                let grid = document.createElement('div');
+                grid.className = 'grid whiteBlock';
+                grid.setAttribute('x', j.toString());
+                grid.setAttribute('y', i.toString());
+                grid.onclick = function() {
+                    var ant = new Ant(j, i, 'up');
+                    setInterval(function() {
+                        ant.move0();
+                    }, 0);
+                }
+                div.appendChild(grid);
+            }
+        }
+
+        function Ant(x0, y0, face) {
+            this.x = x0;
+            this.y = y0;
+            this.face = face;
+
+            this.move0 = function() {
+                let grid = document.querySelector('[x=\"'+this.x+'\"][y=\"'+this.y+'\"]');
+                if (grid == null) {                   
+                    return;
+                }
+                if (grid.className === 'grid blackBlock') {
+                    grid.className = 'grid whiteBlock';
+                    this.turnRight();
+                } else {
+                    grid.className = 'grid blackBlock';
+                    this.turnLeft();
+                }
+            }
+
+            //让蚂蚁向左走一格
+            this.turnLeft = function() {
+                switch(this.face) {
+                    case 'up':
+                        this.x--;
+                        this.face = 'left';
+                        break;
+                    case 'down':
+                        this.x++;
+                        this.face = 'right';
+                        break;
+                    case 'left':
+                        this.y++;
+                        this.face = 'down';
+                        break;
+                    case 'right':
+                        this.y--;
+                        this.face = 'up';
+                        break;
+                }
+            }
+
+            //让蚂蚁向右走一格
+            this.turnRight = function() {
+                switch(this.face) {
+                    case 'up':
+                        this.x++;
+                        this.face = 'right';
+                        break;
+                    case 'down':
+                        this.x--;
+                        this.face = 'left';
+                        break;
+                    case 'left':
+                        this.y--;
+                        this.face = 'up';
+                        break;
+                    case 'right':
+                        this.y++;
+                        this.face = 'down';
+                        break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
